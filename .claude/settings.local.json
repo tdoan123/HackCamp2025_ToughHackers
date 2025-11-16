@@ -5,7 +5,19 @@
       "Bash(curl:*)",
       "Bash(amplify push:*)",
       "Bash(npm install:*)",
-      "Bash(node run-schema.js:*)"
+      "Bash(node run-schema.js:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git checkout:*)",
+      "Bash(git stash:*)",
+      "Bash(npm start)",
+      "Bash(dir:*)",
+      "Bash(cat:*)",
+      "Bash(taskkill:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(node check-db.js:*)",
+      "Bash(node check-data.js:*)"
     ],
     "deny": [],
     "ask": []
