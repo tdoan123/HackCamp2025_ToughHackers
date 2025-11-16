@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(aws rds describe-db-instances:*)",
+      "Bash(curl:*)",
+      "Bash(amplify push:*)",
+      "Bash(npm install:*)",
+      "Bash(node run-schema.js:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

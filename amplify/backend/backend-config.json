@@ -1,0 +1,43 @@
+{
+  "api": {
+    "indigenousapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "indigenousFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "indigenousFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_indigenousFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "indigenousFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_indigenousFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "indigenousFunction"
+        }
+      ]
+    }
+  }
+}

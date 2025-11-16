@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-culturecompass-dev-bbc66-authRole",
+      "UnauthRoleArn": "arn:aws:iam::319220142883:role/amplify-culturecompass-dev-bbc66-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::319220142883:role/amplify-culturecompass-dev-bbc66-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-culturecompass-dev-bbc66-deployment",
+      "UnauthRoleName": "amplify-culturecompass-dev-bbc66-unauthRole",
+      "StackName": "amplify-culturecompass-dev-bbc66",
+      "StackId": "arn:aws:cloudformation:us-east-1:319220142883:stack/amplify-culturecompass-dev-bbc66/397603b0-c2b5-11f0-9d8c-0e83c6194e71",
+      "AmplifyAppId": "d1ucl9neb874o1"
+    },
+    "categories": {
+      "function": {
+        "indigenousFunction": {
+          "deploymentBucketName": "amplify-culturecompass-dev-bbc66-deployment",
+          "s3Key": "amplify-builds/indigenousFunction-43612f6e623253597058-build.zip"
+        }
+      },
+      "api": {
+        "indigenousapi": {}
+      }
+    }
+  }
+}
