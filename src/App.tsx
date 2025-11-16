@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react'
 import { WorldMap } from './components/world-map'
-import { StoryForm} from './components/story-form'
+import { InfoModal } from './components/info-modal'
+import { StoryForm } from './components/story-form'
 import { EventForm } from './components/event-form'
+import { ContactForm } from './components/contact-form'
+import { CultureCompassHeader } from './components/culture-compass-header'
+import { HeroSection } from './components/hero-section'
 import { Button } from './components/ui/button'
 import { Toaster } from './components/ui/toaster'
-import { BookOpen, Calendar, Loader2 } from 'lucide-react'
+import { BookOpen, Calendar, Users, Loader2 } from 'lucide-react'
 import { getStories, getEvents, createStory, createEvent, type BackendStory, type BackendEvent } from './lib/api'
 import { useToast } from './hooks/use-toast'
 
@@ -50,14 +54,16 @@ export interface Person {
 
 function App() {
   const { toast } = useToast()
+  const [selectedPeople, setSelectedPeople] = useState<string | null>(null)
   const [storyFormOpen, setStoryFormOpen] = useState(false)
   const [eventFormOpen, setEventFormOpen] = useState(false)
+  const [contactFormOpen, setContactFormOpen] = useState(false)
   const [stories, setStories] = useState<Story[]>([])
-  const [showStoryPins, setShowStoryPins] = useState(true)
+  const [showStoryPins, setShowStoryPins] = useState(false)
   const [events, setEvents] = useState<Event[]>([])
-  const [showEventPins, setShowEventPins] = useState(true)
-  const [people] = useState<Person[]>([])
-  const [showPeoplePins] = useState(false)
+  const [showEventPins, setShowEventPins] = useState(false)
+  const [people, setPeople] = useState<Person[]>([])
+  const [showPeoplePins, setShowPeoplePins] = useState(false)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
 
@@ -104,7 +110,7 @@ function App() {
         setEvents(transformedEvents)
 
         toast({
-          title: "Welcome to Culture Compass!",
+          title: "Data loaded",
           description: `Loaded ${transformedStories.length} stories and ${transformedEvents.length} events`,
         })
       } catch (error) {
@@ -148,7 +154,7 @@ function App() {
       setStories([...stories, transformedStory])
       toast({
         title: "Story submitted!",
-        description: "Your story has been submitted for review.",
+        description: "Your story has been submitted for review",
       })
     } catch (error) {
       console.error('Failed to create story:', error)
@@ -192,7 +198,7 @@ function App() {
       setEvents([...events, transformedEvent])
       toast({
         title: "Event submitted!",
-        description: "Your event has been submitted for review.",
+        description: "Your event has been submitted for review",
       })
     } catch (error) {
       console.error('Failed to create event:', error)
@@ -206,50 +212,72 @@ function App() {
     }
   }
 
+  const handleAddPerson = (person: Omit<Person, 'id' | 'createdAt'>) => {
+    const newPerson: Person = {
+      ...person,
+      id: `person-${Date.now()}`,
+      createdAt: new Date(),
+    }
+    setPeople([...people, newPerson])
+    console.log('[v0] New person added:', newPerson)
+  }
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <main className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
           <Loader2 className="h-12 w-12 animate-spin mx-auto text-primary" />
-          <p className="text-muted-foreground">Loading Culture Compass...</p>
+          <p className="text-muted-foreground">Loading stories and events...</p>
         </div>
-      </div>
+      </main>
     )
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="bg-gradient-to-b from-background via-background/95 to-background/90 backdrop-blur-sm border-b">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground tracking-tight">
-                Culture Compass
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                Indigenous Knowledge Sharing Platform
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <Button onClick={() => setStoryFormOpen(true)} disabled={submitting}>
-                <BookOpen className="mr-2 h-4 w-4" />
-                Share Story
-              </Button>
-              <Button onClick={() => setEventFormOpen(true)} disabled={submitting}>
-                <Calendar className="mr-2 h-4 w-4" />
-                Post Event
-              </Button>
-            </div>
+    <main className="min-h-screen bg-background">
+      <CultureCompassHeader />
+      <HeroSection />
+
+      <header className="bg-gradient-to-b from-background/95 to-background/0 backdrop-blur-sm">
+        <div className="container mx-auto flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">
+            WorldMap
+          </h1>
+          <div className="flex gap-4">
+            <Button
+              onClick={() => setStoryFormOpen(true)}
+              variant="default"
+              size="default"
+            >
+              <BookOpen className="mr-2 h-4 w-4" />
+              Stories
+            </Button>
+            <Button
+              onClick={() => setEventFormOpen(true)}
+              variant="default"
+              size="default"
+            >
+              <Calendar className="mr-2 h-4 w-4" />
+              Events
+            </Button>
+            <Button
+              onClick={() => setContactFormOpen(true)}
+              variant="default"
+              size="default"
+            >
+              <Users className="mr-2 h-4 w-4" />
+              People
+            </Button>
           </div>
         </div>
       </header>
 
-      <div className="h-[calc(100vh-120px)]">
+      <div style={{ marginTop: '32px' }}>
         <WorldMap
-          onSelectPeople={() => {}}
+          onSelectPeople={setSelectedPeople}
           onOpenStoryForm={() => setStoryFormOpen(true)}
           onOpenEventForm={() => setEventFormOpen(true)}
-          onOpenContactForm={() => {}}
+          onOpenContactForm={() => setContactFormOpen(true)}
           stories={stories}
           showStoryPins={showStoryPins}
           onToggleStoryPins={() => setShowStoryPins(!showStoryPins)}
@@ -258,14 +286,33 @@ function App() {
           onToggleEventPins={() => setShowEventPins(!showEventPins)}
           people={people}
           showPeoplePins={showPeoplePins}
-          onTogglePeoplePins={() => {}}
+          onTogglePeoplePins={() => setShowPeoplePins(!showPeoplePins)}
         />
       </div>
 
-      <StoryForm open={storyFormOpen} onOpenChange={setStoryFormOpen} onSubmit={handleAddStory} />
-      <EventForm open={eventFormOpen} onOpenChange={setEventFormOpen} onSubmit={handleAddEvent} />
+      <InfoModal
+        peopleId={selectedPeople}
+        open={!!selectedPeople}
+        onOpenChange={(open) => !open && setSelectedPeople(null)}
+      />
+
+      <StoryForm
+        open={storyFormOpen}
+        onOpenChange={setStoryFormOpen}
+        onSubmit={handleAddStory}
+      />
+      <EventForm
+        open={eventFormOpen}
+        onOpenChange={setEventFormOpen}
+        onSubmit={handleAddEvent}
+      />
+      <ContactForm
+        open={contactFormOpen}
+        onOpenChange={setContactFormOpen}
+        onSubmit={handleAddPerson}
+      />
       <Toaster />
-    </div>
+    </main>
   )
 }
 
